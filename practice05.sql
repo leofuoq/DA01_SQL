@@ -119,4 +119,14 @@ GROUP BY ct.city
 ORDER BY sum(p.amount) DESC
 LIMIT 1
 
---Bài 8--
+--Bài 8-- Bài này sửa đề hoặc sửa đáp án đi 
+select CONCAT(ct.city,',',ctr.country), sum(p.amount)  
+FROM country AS ctr
+JOIN city AS ct USING(country_id) 
+JOIN address AS addr USING(city_id)
+JOIN customer AS cu USING(address_id)
+JOIN payment AS p USING(customer_id)
+GROUP BY CONCAT(ct.city,',',ctr.country)
+ORDER BY sum(p.amount) ASC
+LIMIT 1
+
