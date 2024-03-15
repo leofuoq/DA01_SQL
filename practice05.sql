@@ -54,3 +54,69 @@ FROM pages AS a
 LEFT JOIN page_likes AS b
 ON a.page_id=b.page_id
 WHERE b.page_id IS NULL;
+
+-----------------------------------------------------------------------MIDTEST------------------------------------------------------------------------------------------------
+--Bài 1--
+SELECT DISTINCT replacement_cost
+FROM film 
+ORDER BY replacement_cost ASC
+limit 1
+
+--Bài 2--
+SELECT 
+CASE
+	WHEN replacement_cost between 9.99 and 19.99 THEN 'low'
+	WHEN replacement_cost between 20.00 and 24.99 THEN 'medium'
+	WHEN replacement_cost between 25.00 and 29.99 THEN 'high'
+END cost 
+FROM film
+)
+SELECT COUNT(*) FROM A
+WHERE cost ='low'
+
+--Bài 3--
+SELECT f.title, f.length, c.name 
+FROM film as f
+JOIN film_category as fc
+	ON f.film_id = fc.film_id
+JOIN category as c
+	ON fc.category_id = c.category_id AND c.name IN ('Drama','Sports')
+ORDER BY f.length DESC
+LIMIT 1
+
+--Bài 4--
+SELECT c.name, count(fc.film_id) as amount
+FROM film_category as fc
+JOIN category as c
+	ON fc.category_id = c.category_id 
+GROUP BY c.name
+ORDER BY amount DESC
+LIMIT 1
+
+--Bài 5--
+SELECT (a.first_name||' ' || a.last_name) as name, 
+       count(fa.film_id) as amount
+FROM actor as a
+JOIN film_actor as fa
+	ON a.actor_id = fa.actor_id 
+GROUP BY (a.first_name||' ' || a.last_name)
+ORDER BY amount DESC
+LIMIT 1
+
+--Bài 6--
+SELECT count(*) FROM address
+LEFT JOIN customer
+USING(address_id)
+WHERE customer_id IS NULL
+
+--Bài 7--
+select ct.city, sum(p.amount)  
+FROM city AS ct
+JOIN address AS addr USING(city_id)
+JOIN customer AS cu USING(address_id)
+JOIN payment AS p USING(customer_id)
+GROUP BY ct.city
+ORDER BY sum(p.amount) DESC
+LIMIT 1
+
+--Bài 8--
