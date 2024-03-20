@@ -1,4 +1,4 @@
--- ĐANG LÀM NHÉ, TỐI A NGỦ SỚM MAI TIẾT KTL RỒI CHECK NHA, ĐANG XỬ LÝ TÍ CÔNG CHUYỆN--
+-- BAI KHO QUA, CHO E XIN THEM MOT CHUT THOI GIAN NHE, TOI NAY A NGU SOM MAI TIET KTL ROI CHECK NHA, YEU ANH--
 --Bài 1--
 WITH list2 AS (
 SELECT company_id	,title, description,count(company_id) 
@@ -53,26 +53,10 @@ AND a.user_id = b.user_id
 WHERE b.month = 7
 GROUP BY b.month
   
---Bài 6-- WHY only 4/16 test case
-WITH list1 AS(
-SELECT DATE_FORMAT(trans_date, '%Y-%m') AS month, country, count(id) AS trans_count, sum(amount) AS trans_total_amount 
-FROM Transactions 
-GROUP BY month, country),
-list2 AS(
-SELECT DATE_FORMAT(trans_date, '%Y-%m') AS month, country, count(id) AS approved_count, sum(amount) AS approved_total_amount
-FROM Transactions 
-WHERE state = 'approved'
-GROUP BY month, country)
+--Bài 6-- 
 
-SELECT a.month, a.country, a.trans_count, b.approved_count, a.trans_total_amount, b.approved_total_amount 
-FROM list1 as a JOIN list2 as b
-ON a.country = b.country and a.month = b.month
 
---Bài 7-- need help
-SELECT product_id, year AS first_year, quantity, price
-FROM sales
-GROUP BY product_id
-HAVING year = min(year)
+--Bài 7--
   
 --Bài 8--
 SELECT customer_id FROM customer 
@@ -94,21 +78,6 @@ SELECT count(*) FROM list2
 WHERE count >1
 
 --Bài 11-- need help
-WITH listCus AS (
-SELECT user_id, count(movie_id) from MovieRating
-GROUP BY user_id 
-ORDER BY count(movie_id) DESC),
-list_id AS (SELECT movie_id, avg(rating) FROM MovieRating 
-WHERE DATE_FORMAT(created_at, '%Y-%m') = '2020-02'
-GROUP BY movie_id
-ORDER BY AVG(rating) DESC
-limit 1)
-(SELECT name as results from Users JOIN listCus USING(user_id)
-ORDER BY name
-LIMIT 1)
-UNION 
-(SELECT Movies.title  FROM list_id 
-JOIN Movies using(movie_id))
 
 --Bài 12--
 WITH list AS ((SELECT requester_id AS id FROM RequestAccepted)
