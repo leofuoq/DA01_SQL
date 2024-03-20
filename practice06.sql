@@ -7,7 +7,23 @@ SELECT count(*) FROM list2
 WHERE count >1
 
 --Bài 2--
-chịu
+WITH app AS(
+SELECT category, product, SUM(spend) AS total_spend 
+FROM product_spend
+WHERE category = 'appliance'
+GROUP BY category, product
+order  by  category, product DESC
+limit 2),
+elec AS(
+SELECT category, product, SUM(spend) AS total_spend 
+FROM product_spend
+WHERE category = 'electronics'
+GROUP BY category, product
+order  by  category, product DESC
+limit 2)
+SELECT category, product, total_spend FROM app 
+UNION SELECT category, product, total_spend FROM elec
+
 
 --Bài 3--
 WITH list AS (
