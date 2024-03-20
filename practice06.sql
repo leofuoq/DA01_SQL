@@ -1,3 +1,4 @@
+-- ĐANG LÀM NHÉ, TỐI A NGỦ SỚM MAI TIẾT KTL RỒI CHECK NHA, ĐANG XỬ LÝ TÍ CÔNG CHUYỆN--
 --Bài 1--
 WITH list2 AS (
 SELECT company_id	,title, description,count(company_id) 
