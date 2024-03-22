@@ -51,3 +51,12 @@ END rolling_avg_3d
 FROM A
 
 --Bài 6--
+WITH A AS(SELECT transaction_id, merchant_id, credit_card_id, amount,
+EXTRACT( HOUR FROM LEAD(transaction_timestamp) over( PARTITION BY merchant_id ORDER BY transaction_timestamp) - transaction_timestamp)*60
++ EXTRACT( minute FROM LEAD(transaction_timestamp) over( PARTITION BY merchant_id ORDER BY transaction_timestamp) - transaction_timestamp) as minute
+FROM transactions)
+SELECT COUNT(*) 
+FROM A
+WHERE minute <10
+
+--Bài 7--
