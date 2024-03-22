@@ -60,3 +60,25 @@ FROM A
 WHERE minute <10
 
 --Bài 7--
+WITH A AS (SELECT category, product, sum(spend) as total_spend,
+RANK() OVER(PARTITION BY category ORDER BY sum(spend) DESC) AS rank,
+EXTRACT(YEAR FROM transaction_date) AS year
+FROM product_spend
+GROUP BY category, product, year)
+
+SELECT category, product, total_spend FROM A
+WHERE rank IN (1,2)
+ORDER BY category, total_spend DESC
+
+--Bài 8--
+WITH A AS
+(SELECT artist_name, count(rank) as count_song,
+DENSE_RANK() OVER(ORDER BY count(rank) DESC) AS artist_rank
+FROM artists as at JOIN songs as s USING(artist_id)
+JOIN global_song_rank AS rank USING (song_id)
+WHERE rank.rank <= 10
+GROUP BY artist_name)
+SELECT artist_name, artist_rank 
+FROM A
+WHERE artist_rank <6
+ORDER BY artist_rank 
