@@ -6,7 +6,13 @@ where id % 2 = 0
 select distinct count(city) - count(distinct city) from station
 
 --Bài 3--
-  Dạy đi
+WITH A AS( SELECT card_name, issued_amount, issue_month || '-' || issue_year as year
+FROM monthly_cards_issued)
+
+SELECT DISTINCT card_name, 
+FIRST_VALUE(issued_amount) OVER(PARTITION BY card_name ORDER BY year) as issued_amount
+FROM A
+ORDER BY issued_amount DESC
 --Bài 4--
 select sum(item_count)/sum(order_occurrences) as mean FROM items_per_order
 
