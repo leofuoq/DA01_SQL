@@ -66,4 +66,15 @@ UPDATE sales_dataset_rfm_prj
 SET YEAR_ID = EXTRACT(YEAR FROM orderdate)
 
 --Bài 5-- Hãy tìm outlier (nếu có) cho cột QUANTITYORDERED và hãy chọn cách xử lý cho bản ghi đó (2 cách) ( Không chạy câu lệnh trước khi bài được review)
+--Box plot--
+WITH min_max AS (
+SELECT (q1 - 1.5*iqr) as Min_value,
+	   (q3 + 1.5*iqr) as Max_value
+FROM (SELECT percentile_cont(0.25) WITHIN GROUP (ORDER BY quantityordered) as Q1,
+percentile_cont(0.75) WITHIN GROUP (ORDER BY quantityordered) as Q3,
+percentile_cont(0.75) WITHIN GROUP (ORDER BY quantityordered) -  percentile_cont(0.25) WITHIN GROUP (ORDER BY quantityordered) AS iqr
+from sales_dataset_rfm_prj) AS abc)
 
+SELECT quantityordered from sales_dataset_rfm_prj
+WHERE quantityordered > (select max_value from min_max)
+OR quantityordered < (select min_value from min_max)
