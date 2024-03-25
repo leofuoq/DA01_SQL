@@ -78,3 +78,17 @@ from sales_dataset_rfm_prj) AS abc)
 SELECT quantityordered from sales_dataset_rfm_prj
 WHERE quantityordered > (select max_value from min_max)
 OR quantityordered < (select min_value from min_max)
+
+--Zscore--
+WITH kkk AS
+(select orderdate, quantityordered,
+(select avg(quantityordered)
+FROM sales_dataset_rfm_prj) AS avg,
+(select stddev(quantityordered)
+FROM sales_dataset_rfm_prj) AS stddev
+FROM sales_dataset_rfm_prj)
+
+SELECT orderdate, quantityordered, (quantityordered-avg)/stddev as Zscore from kkk
+WHERE abs((quantityordered-avg)/stddev) > 3 
+--
+Chọn cách xử lý: xóa mọe
