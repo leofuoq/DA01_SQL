@@ -85,3 +85,27 @@ FROM A
 GROUP BY year_month, category)
 SELECT * FROM B
 ORDER BY year_month
+
+----
+WITH A AS(SELECT FORMAT_DATE('%Y-%m',created_at) as year_month,
+order_item.order_id ,
+product.category as product_category,
+order_item.sale_price,
+product.cost
+FROM bigquery-public-data.thelook_ecommerce.order_items order_item
+JOIN bigquery-public-data.thelook_ecommerce.products product
+ON order_item.product_id = product.id
+WHERE order_item.status = 'Complete'),
+B AS(
+SELECT year_month, product_category, ROUND(sum(sale_price),2) as TPV, count(order_id) as TPO, 
+ROUND(sum(cost),2) as total_cost
+FROM A
+GROUP BY year_month, product_category
+ORDER BY year_month, product_category)
+CREATE VIEW vw_ecommerce_analyst AS (
+SELECT year_month, product_category, TPV,TPO,
+ROUND((TPV - LAG(TPV) OVER(PARTITION BY product_category ORDER BY year_month))*100/LAG(TPV) OVER(PARTITION BY product_category ORDER BY year_month),2) ||' '||'%'  AS Revenue_growth,
+ROUND(( TPO - LAG(TPO) OVER(PARTITION BY product_category ORDER BY year_month))*100/LAG(TPO) OVER(PARTITION BY product_category ORDER BY year_month),2) ||' '||'%'  AS Order_growth,
+total_cost, ROUND(TPV - total_cost,2) AS total_profit, 
+ROUND((TPV - total_cost)/total_cost,2) AS Profit_to_cost_ratio
+FROM B) -- lệnh create view k chạy được phải tự làm bằng tay--
