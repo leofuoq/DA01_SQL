@@ -1,4 +1,4 @@
---Bài 1-- trên bigquery này k dùng to_char được nhỉ
+--Bài 1-- 
 WITH A AS(SELECT FORMAT_DATE('%Y-%m',created_at) as year_month,
 user_id,order_id, status 
 from bigquery-public-data.thelook_ecommerce.orders
