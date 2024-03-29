@@ -1,5 +1,5 @@
 --Bài 1-- trên bigquery này k dùng to_char được nhỉ
-WITH A AS(select EXTRACT(YEAR FROM created_at) ||'-'||EXTRACT(MONTH FROM created_at) as year_month,
+WITH A AS(SELECT FORMAT_DATE('%Y-%m',created_at) as year_month,
 user_id,order_id, status 
 from bigquery-public-data.thelook_ecommerce.orders
 order by year_month)
@@ -10,7 +10,7 @@ GROUP BY year_month
 ORDER BY year_month
 
 --Bài 2--
-WITH A AS (select EXTRACT(YEAR FROM created_at) ||'-'||EXTRACT(MONTH FROM created_at) as year_month,
+WITH A AS (SELECT FORMAT_DATE('%Y-%m',created_at) as year_month,
 user_id,order_id, sale_price
 FROM bigquery-public-data.thelook_ecommerce.order_items
 WHERE created_at between '2019-01-01' and '2022-04-30' )
@@ -48,7 +48,7 @@ UNION ALL
 ORDER BY tag
 
 --Bài 4--
-WITH A AS(SELECT EXTRACT(YEAR FROM created_at) ||'-'||EXTRACT(MONTH FROM created_at) as year_month,
+WITH A AS(SELECT FORMAT_DATE('%Y-%m',created_at) as year_month,
 a.id as product_id, a.name as product_name, ROUND(b.sale_price,2) as sales, ROUND(a.cost,2), ROUND(b.sale_price - a.cost,2) as profit1
 FROM bigquery-public-data.thelook_ecommerce.products a
 JOIN bigquery-public-data.thelook_ecommerce.order_items b
