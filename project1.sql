@@ -91,4 +91,3 @@ FROM sales_dataset_rfm_prj)
 SELECT orderdate, quantityordered, (quantityordered-avg)/stddev as Zscore from kkk
 WHERE abs((quantityordered-avg)/stddev) > 3 
 --
-Chọn cách xử lý: xóa mọe
